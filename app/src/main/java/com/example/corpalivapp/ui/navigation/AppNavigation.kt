@@ -6,13 +6,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.example.corpalivapp.data.local.CorpalivDatabase
 import com.example.corpalivapp.ui.screens.CatalogoScreen
 import com.example.corpalivapp.ui.screens.ContactoScreen
 import com.example.corpalivapp.ui.screens.HomeScreen
 import com.example.corpalivapp.ui.screens.ProgramasScreen
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(database: CorpalivDatabase) {
     var pantallaActual by rememberSaveable {
         mutableStateOf("inicio")
     }
@@ -22,36 +23,24 @@ fun AppNavigation() {
     }
 
     when (pantallaActual) {
-        "programas" -> {
-            ProgramasScreen(
-                onVolver = { pantallaActual = "inicio" }
-            )
-        }
+        "programas" -> ProgramasScreen(
+            onVolver = { pantallaActual = "inicio" },
+            database = database
+        )
 
-        "catalogo" -> {
-            CatalogoScreen(
-                onVolver = { pantallaActual = "inicio" }
-            )
-        }
+        "catalogo" -> CatalogoScreen(
+            onVolver = { pantallaActual = "inicio" }
+        )
 
-        "contacto" -> {
-            ContactoScreen(
-                onVolver = { pantallaActual = "inicio" }
-            )
-        }
+        "contacto" -> ContactoScreen(
+            onVolver = { pantallaActual = "inicio" },
+            database = database
+        )
 
-        else -> {
-            HomeScreen(
-                onProgramasClick = {
-                    pantallaActual = "programas"
-                },
-                onCatalogoClick = {
-                    pantallaActual = "catalogo"
-                },
-                onContactoClick = {
-                    pantallaActual = "contacto"
-                }
-            )
-        }
+        else -> HomeScreen(
+            onProgramasClick = { pantallaActual = "programas" },
+            onCatalogoClick = { pantallaActual = "catalogo" },
+            onContactoClick = { pantallaActual = "contacto" }
+        )
     }
 }
