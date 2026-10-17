@@ -33,7 +33,8 @@ fun AppNavigation(database: CorpalivDatabase) {
         )
 
         "contacto" -> ContactoScreen(
-            onVolver = { pantallaActual = "inicio" }
+            onVolver = { pantallaActual = "inicio" },
+            database = database
         )
 
         else -> HomeScreen(
