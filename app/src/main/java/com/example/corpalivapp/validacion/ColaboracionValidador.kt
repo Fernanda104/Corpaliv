@@ -12,7 +12,13 @@ import java.util.Locale
 
 object ColaboracionValidador {  // object crea una sola instancia que se usa directamente
 
-    val TIPOS_COLABORACION = listOf("Donación", "Colaboración", "Alianza")
+    val TIPOS_COLABORACION = listOf(
+        "Donación",
+        "Alianza",
+        "Voluntariado",
+        "Compra de productos",
+        "Capacitación"
+    )
 
     private const val CANTIDAD_MINIMA = 1
     private const val CANTIDAD_MAXIMA = 500
