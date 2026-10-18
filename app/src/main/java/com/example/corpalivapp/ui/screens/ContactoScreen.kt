@@ -10,16 +10,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Business
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +31,8 @@ import com.example.corpalivapp.ui.components.CampoFormulario
 import com.example.corpalivapp.validacion.ColaboracionValidador
 import com.example.corpalivapp.viewmodel.ColaboracionViewModel
 import com.example.corpalivapp.viewmodel.CorpalivViewModelFactory
+import com.example.corpalivapp.ui.components.CampoFecha
+import com.example.corpalivapp.ui.components.SelectorTipo
 
 @Composable
 fun ContactoScreen(
@@ -93,43 +91,12 @@ fun ContactoScreen(
             tipoTeclado = KeyboardType.Email
         )
 
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "Tipo de colaboración",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                ColaboracionValidador.TIPOS_COLABORACION.forEach { tipo ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = formulario.tipo == tipo,
-                            onClick = {
-                                colaboracionViewModel.cambiarTipo(tipo)
-                            }
-                        )
-                        Text(
-                            text = tipo,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-
-                if (formulario.errorTipo != null) {
-                    Text(
-                        text = formulario.errorTipo.orEmpty(),
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
-            }
-        }
+        SelectorTipo(
+            seleccionado = formulario.tipo,
+            opciones = ColaboracionValidador.TIPOS_COLABORACION,
+            alElegir = colaboracionViewModel::cambiarTipo,
+            error = formulario.errorTipo
+        )
 
         CampoFormulario(
             valor = formulario.cantidadPersonas,
@@ -140,11 +107,9 @@ fun ContactoScreen(
             tipoTeclado = KeyboardType.Number
         )
 
-        CampoFormulario(
-            valor = formulario.fecha,
-            alCambiar = colaboracionViewModel::cambiarFecha,
-            etiqueta = "Fecha de contacto (dd/MM/aaaa)",
-            icono = Icons.Filled.CalendarMonth,
+        CampoFecha(
+            fecha = formulario.fecha,
+            alElegir = colaboracionViewModel::elegirFechaDelCalendario,
             error = formulario.errorFecha
         )
 
@@ -181,7 +146,7 @@ fun ContactoScreen(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            androidx.compose.material3.Text("Enviar solicitud")
+            Text("Enviar solicitud")
         }
 
         if (formulario.guardadoConExito) {
