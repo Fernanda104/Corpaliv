@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class ColaboracionViewModel(
     private val repository: ColaboracionRepository
@@ -68,6 +72,14 @@ class ColaboracionViewModel(
             fecha = valor,
             errorFecha = ColaboracionValidador.validarFecha(valor)
         )
+    }
+
+    // El calendario entrega la fecha en milisegundos (UTC); se pasa a "dd/MM/aaaa".
+    fun elegirFechaDelCalendario(milisegundos: Long) {
+        val formateador = SimpleDateFormat("dd/MM/yyyy", Locale.ROOT)
+        formateador.timeZone = TimeZone.getTimeZone("UTC")
+        val texto = formateador.format(Date(milisegundos))
+        cambiarFecha(texto)
     }
 
     fun cambiarAceptaContacto(valor: Boolean) {
