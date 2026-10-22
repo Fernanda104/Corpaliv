@@ -47,6 +47,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.example.corpalivapp.notificaciones.NotificacionColaboracion
 import kotlinx.coroutines.launch
+import com.example.corpalivapp.acciones.AccionesContacto
+import com.example.corpalivapp.ui.components.TarjetaContactoDirecto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,6 +131,33 @@ fun ContactoScreen(
                 .padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            TarjetaContactoDirecto(
+                alLlamar = {
+                    val abrio = AccionesContacto.llamar(context)
+                    if (!abrio) {
+                        alcance.launch {
+                            estadoSnackbar.showSnackbar("No encontramos una app para llamar.")
+                        }
+                    }
+                },
+                alEscribirCorreo = {
+                    val abrio = AccionesContacto.escribirCorreo(context)
+                    if (!abrio) {
+                        alcance.launch {
+                            estadoSnackbar.showSnackbar("No encontramos una app de correo.")
+                        }
+                    }
+                },
+                alAbrirMapa = {
+                    val abrio = AccionesContacto.abrirMapa(context)
+                    if (!abrio) {
+                        alcance.launch {
+                            estadoSnackbar.showSnackbar("No encontramos una app de mapas.")
+                        }
+                    }
+                }
+            )
+
             Text(
                 text = "Completa el formulario para expresar tu interés " +
                         "en colaborar con CORPALIV.",
