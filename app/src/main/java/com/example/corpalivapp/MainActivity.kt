@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 
 import com.example.corpalivapp.ui.screens.HomeScreen
 import com.example.corpalivapp.ui.theme.MiAppTheme
+import com.example.corpalivapp.notificaciones.NotificacionColaboracion
 
 class MainActivity :
     ComponentActivity() {
@@ -18,6 +19,7 @@ class MainActivity :
             savedInstanceState
         )
         enableEdgeToEdge()
+        NotificacionColaboracion.crearCanal(this)   // registra el canal al arrancar la app
         setContent {
             MiAppTheme {
                 App()
