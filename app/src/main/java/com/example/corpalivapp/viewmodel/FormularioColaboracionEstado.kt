@@ -22,5 +22,9 @@ data class FormularioColaboracionEstado(
     val errorAceptaContacto: String? = null,
 
     // true justo después de guardar, para mostrar la confirmación
-    val guardadoConExito: Boolean = false
+    val guardadoConExito: Boolean = false,
+
+    // Datos de la última solicitud guardada, para el texto de la notificación
+    val tipoGuardado: String = "",
+    val fechaGuardada: String = ""
 )

@@ -119,7 +119,11 @@ class ColaboracionViewModel(
 
         viewModelScope.launch {
             repository.insertar(nuevaColaboracion)
-            _formulario.value = FormularioColaboracionEstado(guardadoConExito = true)
+            _formulario.value = FormularioColaboracionEstado(
+                guardadoConExito = true,
+                tipoGuardado = nuevaColaboracion.tipoColaboracion,
+                fechaGuardada = nuevaColaboracion.fechaContacto
+            )
         }
     }
 
