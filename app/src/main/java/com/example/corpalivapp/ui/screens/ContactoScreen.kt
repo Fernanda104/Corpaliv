@@ -40,6 +40,13 @@ import com.example.corpalivapp.ui.components.SelectorTipo
 import com.example.corpalivapp.validacion.ColaboracionValidador
 import com.example.corpalivapp.viewmodel.ColaboracionViewModel
 import com.example.corpalivapp.viewmodel.CorpalivViewModelFactory
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.example.corpalivapp.notificaciones.NotificacionColaboracion
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,10 +65,40 @@ fun ContactoScreen(
         .collectAsStateWithLifecycle()
 
     val estadoSnackbar = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    val alcance = rememberCoroutineScope()
 
-    // Cuando el ViewModel avisa que se guardó, muestra la confirmación y luego la apaga.
+    // Diálogo del sistema "¿Permitir notificaciones?" y qué hacer con la respuesta.
+    val lanzadorPermiso = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { concedido ->
+        if (concedido) {
+            NotificacionColaboracion.mostrarSolicitudRecibida(
+                context,
+                formulario.tipoGuardado,
+                formulario.fechaGuardada
+            )
+        } else {
+            alcance.launch {
+                estadoSnackbar.showSnackbar(
+                    "No recibirás la notificación. Puedes activarla en Ajustes."
+                )
+            }
+        }
+    }
+
+    // Al guardar: notifica (o pide el permiso), confirma con Snackbar y apaga el aviso.
     LaunchedEffect(formulario.guardadoConExito) {
         if (formulario.guardadoConExito) {
+            if (NotificacionColaboracion.tienePermiso(context)) {
+                NotificacionColaboracion.mostrarSolicitudRecibida(
+                    context,
+                    formulario.tipoGuardado,
+                    formulario.fechaGuardada
+                )
+            } else {
+                lanzadorPermiso.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
             estadoSnackbar.showSnackbar("¡Gracias! Tu solicitud se guardó correctamente.")
             colaboracionViewModel.ocultarMensajeExito()
         }
