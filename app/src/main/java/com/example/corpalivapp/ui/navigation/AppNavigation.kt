@@ -45,7 +45,8 @@ fun AppNavigation(database: CorpalivDatabase) {
             )
 
             "catalogo" -> CatalogoScreen(
-                onVolver = { pantallaActual = "inicio" }
+                onVolver = { pantallaActual = "inicio" },
+                database = database
             )
 
             "contacto" -> ContactoScreen(
