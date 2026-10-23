@@ -85,16 +85,35 @@ abstract class CorpalivDatabase : RoomDatabase() {
         ) {
             val productos = listOf(
                 Producto(
-                    nombre = "Producto de muestra 1",
-                    descripcion = "Descripción pendiente de completar.",
-                    precio = 0.0,
-                    disponible = true
+                    nombre = "Velas aromáticas artesanales",
+                    descripcion = "Velas de cera de soya elaboradas en el taller de Alba Lab.",
+                    precio = 6990.0
                 ),
                 Producto(
-                    nombre = "Producto de muestra 2",
-                    descripcion = "Descripción pendiente de completar.",
-                    precio = 0.0,
-                    disponible = true
+                    nombre = "Jabones naturales",
+                    descripcion = "Jabones hechos a mano con aceites esenciales.",
+                    precio = 3990.0
+                ),
+                Producto(
+                    nombre = "Caja de regalo corporativa",
+                    descripcion = "Set de productos del taller para regalos de empresa o eventos.",
+                    precio = 19990.0
+                ),
+                Producto(
+                    nombre = "Tarjetas y papelería artesanal",
+                    descripcion = "Tarjetas de saludo y libretas hechas con papel reciclado.",
+                    precio = 2490.0,
+                    disponible = false
+                ),
+                Producto(
+                    nombre = "Servicio de catering inclusivo",
+                    descripcion = "Coffee break y colaciones para reuniones, preparadas por el equipo de Alba Lab.",
+                    precio = 0.0
+                ),
+                Producto(
+                    nombre = "Taller de sensibilización para empresas",
+                    descripcion = "Capacitación sobre inclusión laboral de personas con discapacidad, como parte de la RSE.",
+                    precio = 0.0
                 )
             )
 
