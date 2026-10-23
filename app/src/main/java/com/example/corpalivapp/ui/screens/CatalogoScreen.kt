@@ -15,14 +15,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.corpalivapp.data.local.CorpalivDatabase
+import com.example.corpalivapp.ui.components.FondoCorpaliv
 import com.example.corpalivapp.ui.components.TarjetaProducto
 import com.example.corpalivapp.viewmodel.CorpalivViewModelFactory
 import com.example.corpalivapp.viewmodel.ProductoViewModel
@@ -44,6 +47,7 @@ fun CatalogoScreen(
         .collectAsStateWithLifecycle()
 
     Scaffold(
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 title = { Text("Productos y servicios") },
@@ -54,40 +58,52 @@ fun CatalogoScreen(
                             contentDescription = "Volver al inicio"
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
         }
     ) { paddingValues ->
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentPadding = PaddingValues(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            item {
-                Text(
-                    text = "Cada compra apoya la inclusión laboral de las personas " +
-                            "que participan en Alba Lab. Toca un producto para ver el detalle.",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-
-            if (productos.isEmpty()) {
+        // Fondo de CORPALIV que cambia según el tema claro u oscuro.
+        FondoCorpaliv {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentPadding = PaddingValues(24.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 item {
-                    Text(text = "Todavía no hay productos disponibles.")
+                    Text(
+                        text = "Cada compra apoya la inclusión laboral de las personas " +
+                                "que participan en Alba Lab. Toca un producto para ver el detalle.",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
-            }
 
-            items(
-                items = productos,
-                key = { producto -> producto.id }
-            ) { producto ->
-                TarjetaProducto(
-                    producto = producto,
-                    modifier = Modifier.animateItem()
-                )
+                if (productos.isEmpty()) {
+                    item {
+                        Text(
+                            text = "Todavía no hay productos disponibles.",
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    }
+                }
+
+                items(
+                    items = productos,
+                    key = { producto -> producto.id }
+                ) { producto ->
+                    TarjetaProducto(
+                        producto = producto,
+                        modifier = Modifier.animateItem()
+                    )
+                }
             }
         }
     }

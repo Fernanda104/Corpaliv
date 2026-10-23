@@ -26,9 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.corpalivapp.ui.components.FondoCorpaliv
 
 private val VerdeCorpaliv = Color(0xFF28594D)
-private val FondoCrema = Color(0xFFF5F2EA)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +38,7 @@ fun HomeScreen(
     onContactoClick: () -> Unit = {}
 ) {
     Scaffold(
+        containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
                 title = {
@@ -45,74 +46,81 @@ fun HomeScreen(
                         text = "CORPALIV | Alba Lab",
                         fontWeight = FontWeight.Bold
                     )
-                }
+                },
+                colors = androidx.compose.material3.TopAppBarDefaults
+                    .topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(
+                            alpha = 0.92f
+                        ),
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                    )
             )
-        },
-        containerColor = FondoCrema
+        }
     ) { paddingValues ->
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+        FondoCorpaliv {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = VerdeCorpaliv,
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .padding(24.dp)
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = VerdeCorpaliv,
+                            shape = RoundedCornerShape(20.dp)
+                        )
+                        .padding(24.dp)
+                ) {
+                    Text(
+                        text = "INCLUSIÓN QUE TRANSFORMA VIDAS",
+                        color = Color.White,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = "Conectamos personas, empresas y " +
+                                "oportunidades para construir una sociedad " +
+                                "más inclusiva.",
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
+
                 Text(
-                    text = "INCLUSIÓN QUE TRANSFORMA VIDAS",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
+                    text = "Descubre cómo participar",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                SeccionCard(
+                    titulo = "Nuestros programas",
+                    descripcion = "Conoce nuestras iniciativas de inclusión y desarrollo.",
+                    textoBoton = "Explorar programas",
+                    onClick = onProgramasClick
+                )
 
-                Text(
-                    text = "Conectamos personas, empresas y " +
-                            "oportunidades para construir una sociedad " +
-                            "más inclusiva.",
-                    color = Color.White,
-                    fontSize = 16.sp
+                SeccionCard(
+                    titulo = "Productos y servicios",
+                    descripcion = "Descubre propuestas con impacto social.",
+                    textoBoton = "Ver catálogo",
+                    onClick = onCatalogoClick
+                )
+
+                SeccionCard(
+                    titulo = "Colabora con nosotros",
+                    descripcion = "Conversemos sobre donaciones, colaboraciones y alianzas.",
+                    textoBoton = "Quiero colaborar",
+                    onClick = onContactoClick
                 )
             }
-
-            Text(
-                text = "Descubre cómo participar",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = VerdeCorpaliv
-            )
-
-            SeccionCard(
-                titulo = "Nuestros programas",
-                descripcion = "Conoce nuestras iniciativas de inclusión y desarrollo.",
-                textoBoton = "Explorar programas",
-                onClick = onProgramasClick
-            )
-
-            SeccionCard(
-                titulo = "Productos y servicios",
-                descripcion = "Descubre propuestas con impacto social.",
-                textoBoton = "Ver catálogo",
-                onClick = onCatalogoClick
-            )
-
-            SeccionCard(
-                titulo = "Colabora con nosotros",
-                descripcion = "Conversemos sobre donaciones, colaboraciones y alianzas.",
-                textoBoton = "Quiero colaborar",
-                onClick = onContactoClick
-            )
         }
     }
 }
@@ -128,7 +136,10 @@ private fun SeccionCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface.copy(
+                alpha = 0.94f
+            ),
+            contentColor = MaterialTheme.colorScheme.onSurface
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
@@ -141,14 +152,14 @@ private fun SeccionCard(
                 text = titulo,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = VerdeCorpaliv
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = descripcion,
-                color = Color.DarkGray
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -159,7 +170,8 @@ private fun SeccionCard(
                     containerColor = VerdeCorpaliv
                 )
             ) {
-                Text(text = textoBoton)
+                Text(text = textoBoton,
+                    color = Color.White)
             }
         }
     }

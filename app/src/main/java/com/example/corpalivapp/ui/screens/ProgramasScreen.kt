@@ -20,12 +20,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.corpalivapp.data.local.CorpalivDatabase
 import com.example.corpalivapp.viewmodel.CorpalivViewModelFactory
 import com.example.corpalivapp.viewmodel.ProgramaViewModel
+import androidx.compose.material3.CardDefaults
+import androidx.compose.foundation.background
+import com.example.corpalivapp.ui.components.FondoCorpaliv
 
 @Composable
 fun ProgramasScreen(
     onVolver: () -> Unit,
     database: CorpalivDatabase
-) {
+)
+{
     val factory = CorpalivViewModelFactory(database)
     val programaViewModel: ProgramaViewModel =
         viewModel(factory = factory)
@@ -33,59 +37,76 @@ fun ProgramasScreen(
     val programas by programaViewModel.programas
         .collectAsStateWithLifecycle()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text(
-            text = "Nuestros programas",
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Text(
-            text = "Conoce las iniciativas de CORPALIV " +
-                    "orientadas a la inclusión y el desarrollo."
-        )
-
-        if (programas.isEmpty()) {
+    FondoCorpaliv {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             Text(
-                text = "Todavía no hay programas registrados.",
-                style = MaterialTheme.typography.bodyLarge
+                text = "Nuestros programas",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground
             )
-        } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(
-                    items = programas,
-                    key = { programa -> programa.id }
-                ) { programa ->
-                    Card(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement =
-                                Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = programa.nombre,
-                                style =
-                                    MaterialTheme.typography.titleMedium
-                            )
 
-                            Text(text = programa.descripcion)
+            Text(
+                text = "Conoce las iniciativas de CORPALIV " +
+                        "orientadas a la inclusión y el desarrollo.",
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            if (programas.isEmpty()) {
+                Text(
+                    text = "Todavía no hay programas registrados.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(
+                        items = programas,
+                        key = { programa -> programa.id }
+                    ) { programa ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor =
+                                    MaterialTheme.colorScheme.surface,
+                                contentColor =
+                                    MaterialTheme.colorScheme.onSurface
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                verticalArrangement =
+                                    Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    text = programa.nombre,
+                                    style =
+                                        MaterialTheme.typography.titleMedium,
+                                    color =
+                                        MaterialTheme.colorScheme.onSurface
+                                )
+
+                                Text(
+                                    text = programa.descripcion,
+                                    color =
+                                        MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
 
-        Button(onClick = onVolver) {
-            Text("Volver al inicio")
+            Button(onClick = onVolver) {
+                Text("Volver al inicio")
+            }
         }
     }
 }
