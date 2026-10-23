@@ -35,7 +35,8 @@ private val VerdeCorpaliv = Color(0xFF28594D)
 fun HomeScreen(
     onProgramasClick: () -> Unit = {},
     onCatalogoClick: () -> Unit = {},
-    onContactoClick: () -> Unit = {}
+    onContactoClick: () -> Unit = {},
+    onSolicitudesClick: () -> Unit = {}
 ) {
     Scaffold(
         containerColor = Color.Transparent,
@@ -119,6 +120,13 @@ fun HomeScreen(
                     descripcion = "Conversemos sobre donaciones, colaboraciones y alianzas.",
                     textoBoton = "Quiero colaborar",
                     onClick = onContactoClick
+                )
+
+                SeccionCard(
+                    titulo = "Mis solicitudes",
+                    descripcion = "Revisa las solicitudes de colaboración que enviaste desde este teléfono.",
+                    textoBoton = "Ver mis solicitudes",
+                    onClick = onSolicitudesClick
                 )
             }
         }

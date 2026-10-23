@@ -18,6 +18,7 @@ import com.example.corpalivapp.ui.screens.CatalogoScreen
 import com.example.corpalivapp.ui.screens.ContactoScreen
 import com.example.corpalivapp.ui.screens.HomeScreen
 import com.example.corpalivapp.ui.screens.ProgramasScreen
+import com.example.corpalivapp.ui.screens.SolicitudesScreen
 
 @Composable
 fun AppNavigation(database: CorpalivDatabase) {
@@ -54,10 +55,16 @@ fun AppNavigation(database: CorpalivDatabase) {
                 database = database
             )
 
+            "solicitudes" -> SolicitudesScreen(
+                onVolver = { pantallaActual = "inicio" },
+                database = database
+            )
+
             else -> HomeScreen(
                 onProgramasClick = { pantallaActual = "programas" },
                 onCatalogoClick = { pantallaActual = "catalogo" },
-                onContactoClick = { pantallaActual = "contacto" }
+                onContactoClick = { pantallaActual = "contacto" },
+                onSolicitudesClick = { pantallaActual = "solicitudes" }
             )
         }
     }
