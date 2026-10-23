@@ -55,28 +55,83 @@ abstract class CorpalivDatabase : RoomDatabase() {
                     .build()
 
                 INSTANCE = instancia
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    cargarProgramasIniciales(instancia)
+                }
+
                 instancia
             }
         }
 
+
         private suspend fun cargarProgramasIniciales(
             database: CorpalivDatabase
         ) {
-            val programas = listOf(
-                Programa(
-                    nombre = "Programa de inclusión",
-                    descripcion = "Iniciativa orientada a promover " +
-                            "la participación y la inclusión social."
-                ),
-                Programa(
-                    nombre = "Programa de apoyo familiar",
-                    descripcion = "Iniciativa de acompañamiento " +
-                            "y orientación para las familias."
-                )
+            val programaInclusion = Programa(
+                nombre = "Programa de Inclusión Laboral",
+                descripcion = "Brindamos una variedad de mecanismos diseñados " +
+                        "específicamente para promover y facilitar la inclusión " +
+                        "laboral de personas con discapacidad múltiple. " +
+                        "Estos mecanismos están orientados a ayudarlas a " +
+                        "integrarse de manera efectiva y exitosa en el mundo " +
+                        "laboral, garantizando así que puedan desarrollar sus " +
+                        "habilidades y alcanzar su máximo potencial en sus " +
+                        "entornos de trabajo."
             )
 
-            programas.forEach { programa ->
-                database.programaDao().insertar(programa)
+            val tallerSociolaboral = Programa(
+                nombre = "Taller Sociolaboral",
+                descripcion = "Nos enfocamos en la formación integral de " +
+                        "personas, brindándoles habilidades sociales, " +
+                        "emocionales y laborales que les permitan integrarse " +
+                        "con éxito al mundo laboral. A través de diversas " +
+                        "metodologías, fortalecemos su independencia, autonomía " +
+                        "y competencias de empleabilidad. Además de estas " +
+                        "habilidades, también nos dedicamos al diseño, " +
+                        "fabricación y producción de productos con valor y " +
+                        "sentido, fomentando un ambiente de colaboración, " +
+                        "aprendizaje y crecimiento mutuo entre beneficiarios " +
+                        "y emprendimientos."
+            )
+
+            val dao = database.programaDao()
+
+            val programasOficiales = listOf(
+                programaInclusion to "Programa de inclusión",
+                tallerSociolaboral to "Programa de apoyo familiar"
+            )
+
+            programasOficiales.forEach { (oficial, nombreAntiguo) ->
+                val existente = dao.obtenerPorNombre(oficial.nombre)
+                val antiguo = if (existente == null) {
+                    dao.obtenerPorNombre(nombreAntiguo)
+                } else {
+                    null
+                }
+
+                when {
+                    existente != null -> {
+                        dao.actualizar(
+                            existente.copy(
+                                descripcion = oficial.descripcion,
+                                activo = true
+                            )
+                        )
+                    }
+
+                    antiguo != null -> {
+                        dao.actualizar(
+                            antiguo.copy(
+                                nombre = oficial.nombre,
+                                descripcion = oficial.descripcion,
+                                activo = true
+                            )
+                        )
+                    }
+
+                    else -> dao.insertar(oficial)
+                }
             }
         }
 
