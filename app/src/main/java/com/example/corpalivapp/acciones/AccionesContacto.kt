@@ -27,8 +27,11 @@ object AccionesContacto {
     }
 
     fun abrirMapa(context: Context): Boolean {
-        val busqueda = Uri.encode(DIRECCION)
-        val intento = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$busqueda"))
+        val destino = Uri.encode(DIRECCION)
+        val uri = Uri.parse(
+            "https://maps.app.goo.gl/2b6LYZd9PeXZbZA98"
+        )
+        val intento = Intent(Intent.ACTION_VIEW, uri)
         return abrir(context, intento)
     }
 
